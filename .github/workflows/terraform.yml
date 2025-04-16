@@ -31,11 +31,11 @@ jobs:
 
       - name: Terraform Init
         id: init
-        run: terraform init
+        run: cd use_case-1 && terraform init
 
       - name: Terraform Validate
         id: validate
-        run: terraform validate -no-color
+        run: cd use_case-1 && terraform validate -no-color
 
       - name: Terraform Plan
         id: plan

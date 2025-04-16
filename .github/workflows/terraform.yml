@@ -29,11 +29,6 @@ jobs:
           aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
           aws-region: ${{ env.AWS_REGION }}
 
-      - name: Terraform Destroy
-        id: destroy
-        if: github.ref == 'refs/heads/main' && github.event_name == 'workflow_dispatch'
-        run: cd use_case-1 && terraform destroy -auto-approve -no-color -input=false -var-file="${{ env.TF_VAR_FILE }}"
-
       - name: Terraform Init
         id: init
         run: cd use_case-1 && terraform init

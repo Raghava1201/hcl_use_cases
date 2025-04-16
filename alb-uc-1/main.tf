@@ -3,6 +3,7 @@ module "vpc" {
   region = "us-east-1"
 }
 
+
 module "alb" {
   source = "./modules/alb"
   subnet_ids = module.vpc.subnet_ids

@@ -4,6 +4,8 @@ on:
   push:
     branches:
       - alb-uc-1
+    paths:
+      - 'alb-uc-1/**'
 
 env:
   AWS_REGION: "us-east-1"

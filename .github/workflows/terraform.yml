@@ -1,11 +1,7 @@
 name: Deploy OpenProject Infrastructure
 
 on:
-  push:
-    branches:
-      - main
-    paths:
-      - 'use_case-1/**'
+  workflow_dispatch:  
 
 env:
   AWS_REGION: "us-east-1" 

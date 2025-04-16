@@ -49,9 +49,9 @@ jobs:
 
       - name: Output ALB DNS Name
         id: output
-        if: github.ref == 'refs/heads/main' && github.event_name == 'workflow_dispatch' && steps.apply.outcome == 'success'
+        if: github.ref == 'refs/heads/main' && github.event_name == 'workflow_diapatch' && steps.apply.outcome == 'success'
         run: |
-          cd use_case-1 # Corrected directory to use_case-1
+          cd use_case-1
           ALB_DNS=$(terraform output alb_dns_name)
-          echo "ALB_DNS=$ALB_DNS" >> $GITHUB_OUTPUT
+          echo "ALB_DNS=$ALB_DNS" >> "$GITHUB_OUTPUT"
         shell: bash

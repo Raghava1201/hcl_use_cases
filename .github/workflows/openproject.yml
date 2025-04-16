@@ -1,27 +1,27 @@
-name: Deploy AWS Infrastructure
+name: Deploy OpenProject Infrastructure
 
 on:
   push:
     branches:
-      - alb-uc-1
+      - main
     paths:
-      - 'alb-uc-1/**'
+      - 'use_case-1/**'
 
 env:
-  AWS_REGION: "us-east-1"
-  TF_VERSION: "1.11.4"
+  AWS_REGION: "us-east-1" 
+  TF_VERSION: "1.6.x"     
+  TF_VAR_FILE: "openproject.tfvars"
 
 jobs:
   terraform:
     name: Terraform Apply
     runs-on: ubuntu-latest
-
     steps:
       - name: Checkout code
         uses: actions/checkout@v4
 
       - name: Setup Terraform
-        uses: hashicorp/terraform-github-actions@v2.10.0
+        uses: hashicorp/setup-terraform@v2.0.3
         with:
           terraform_version: ${{ env.TF_VERSION }}
           setup_only: true
@@ -37,14 +37,23 @@ jobs:
         id: init
         run: terraform init
 
-      - name: Terraform validate
+      - name: Terraform Validate
         id: validate
-        run: terraform validate
+        run: terraform validate -no-color
 
-      - name: Terraform plan
+      - name: Terraform Plan
         id: plan
-        run: terraform plan
+        if: github.event_name == 'pull_request'
+        run: cd use_case-1 && terraform plan -no-color -input=false -var-file="${{ env.TF_VAR_FILE }}"
 
       - name: Terraform Apply
         id: apply
-        run: terraform apply -auto-approve
+        if: github.ref == 'refs/heads/main' && github.event_name == 'push
+        run: cd use_case-1 && terraform apply -auto-approve -no-color -input=false -var-file="${{ env.TF_VAR_FILE }}"
+
+      - name: Output ALB DNS Name
+        id: output
+        if: github.ref == 'refs/heads/main' && github.event_name == 'push' && steps.apply.outcome == 'success'
+        run: cd alb-uc-1 && terraform output alb_dns_name
+        
+    

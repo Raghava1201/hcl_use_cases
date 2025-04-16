@@ -37,6 +37,13 @@ jobs:
         id: init
         run: cd use_case-1 && terraform init
 
+      - name: Import Existing Resources
+        run: |
+          cd use_case-1
+          terraform import aws_security_group.openproject_sg sg-YOUR_SECURITY_GROUP_ID
+          terraform import aws_lb_target_group.openproject_tg arn:AWS:ELBv2_TARGET_GROUP_ARN
+        shell: bash
+
       - name: Terraform Destroy
         id: destroy
         run: cd use_case-1 && terraform destroy -auto-approve -var-file="${{ env.TF_VAR_FILE }}"

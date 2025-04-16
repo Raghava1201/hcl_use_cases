@@ -40,8 +40,8 @@ jobs:
       - name: Import Existing Resources
         run: |
           cd use_case-1
-          terraform import aws_security_group.openproject_sg sg-YOUR_SECURITY_GROUP_ID
-          terraform import aws_lb_target_group.openproject_tg arn:AWS:ELBv2_TARGET_GROUP_ARN
+          terraform import aws_security_group.openproject_sg sg-0d3dbed228f9e67ec
+          terraform import aws_lb_target_group.openproject_tg arn:aws:elasticloadbalancing:us-east-1:154767946691:targetgroup/openproject-tg/b060be5bcdab2ba3
         shell: bash
 
       - name: Terraform Destroy

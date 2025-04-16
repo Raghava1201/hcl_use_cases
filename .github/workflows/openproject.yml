@@ -54,6 +54,10 @@ jobs:
       - name: Output ALB DNS Name
         id: output
         if: github.ref == 'refs/heads/main' && github.event_name == 'push' && steps.apply.outcome == 'success'
-        run: cd alb-uc-1 && terraform output alb_dns_name
+        run: |
+          cd use_case-1 # Corrected directory to use_case-1
+          ALB_DNS=$(terraform output alb_dns_name)
+          echo "ALB_DNS=$ALB_DNS" >> $GITHUB_OUTPUT
+        shell: bash
         
     

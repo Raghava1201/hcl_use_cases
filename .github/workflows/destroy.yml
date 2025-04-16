@@ -1,0 +1,42 @@
+name: Destroy OpenProject Infrastructure
+
+on:
+  workflow_dispatch:
+    inputs:
+      environment:
+        description: 'Environment to destroy (e.g., default)'
+        required: false
+        default: 'default'
+
+env:
+  AWS_REGION: "us-east-1"
+  TF_VERSION: "1.11.4"
+  TF_VAR_FILE: "openproject.tfvars"
+
+jobs:
+  destroy:
+    name: Terraform Destroy
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Setup Terraform
+        uses: hashicorp/setup-terraform@v2.0.3
+        with:
+          terraform_version: ${{ env.TF_VERSION }}
+
+      - name: Configure AWS credentials
+        uses: aws-actions/configure-aws-credentials@v4
+        with:
+          aws-access-key-id: ${{ secrets.AWS_ACCESS_KEY_ID }}
+          aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+          aws-region: ${{ env.AWS_REGION }}
+
+      - name: Terraform Init
+        id: init
+        run: cd use_case-1 && terraform init
+
+      - name: Terraform Destroy
+        id: destroy
+        run: cd use_case-1 && terraform destroy -auto-approve -var-file="${{ env.TF_VAR_FILE }}"

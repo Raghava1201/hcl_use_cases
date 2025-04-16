@@ -46,12 +46,3 @@ jobs:
         id: apply
         if: github.ref == 'refs/heads/main' && github.event_name == 'workflow_dispatch'
         run: cd use_case-1 && terraform apply -auto-approve -no-color -input=false -var-file="${{ env.TF_VAR_FILE }}"
-
-      - name: Output ALB DNS Name
-        id: output
-        if: github.ref == 'refs/heads/main' && github.event_name == 'workflow_diapatch' && steps.apply.outcome == 'success'
-        run: |
-          cd use_case-1
-          ALB_DNS=$(terraform output alb_dns_name)
-          echo "ALB_DNS=$ALB_DNS" >> "$GITHUB_OUTPUT"
-        shell: bash

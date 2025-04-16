@@ -22,7 +22,7 @@ jobs:
         uses: actions/checkout@v4
 
       - name: Setup Terraform
-        uses: hashicorp/terraform-github-actions@v3
+        uses: hashicorp/setup-terraform@v2.0.3
         with:
           terraform_version: ${{ env.TF_VERSION }}
           setup_only: true
